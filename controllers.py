@@ -19,6 +19,17 @@ def help(request):
     return 'help page!'
 
 
+@router.route('/contact')
+def contact(request):
+    return render('contact.html')
+
+
 @router.route('/notfound')
 def not_found(request):
     return render('404.html')
+
+
+@router.route('/send')
+def send_msg(request):
+    print(f"Пользователь отправил нам сообщение: {request.get('data')}")
+    return 'hello'

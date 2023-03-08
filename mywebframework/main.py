@@ -1,3 +1,6 @@
+from io import BytesIO
+
+
 class Framework:
     def __init__(self, routes, middlewares=None):
         self.routes = routes.get_routes()
@@ -17,15 +20,31 @@ class Framework:
             m(request)
         return request
 
-    def get_page(self, url):
-        request = self.get_request_from_middlewares()
+    def handle_request(self, url, request):
+        if request is None:
+            request = {}
+        request = request | self.get_request_from_middlewares()
         controller = self.routes.get(url, self.routes.get('/notfound', None))
         if controller is None:
             return '404 : Not Found', 'Page not found.'
         return '200 : OK', controller(request=request)
 
+    def get_request_data(self, environ):
+        content_length_data = environ.get('CONTENT_LENGTH')
+        content_length = int(content_length_data) if content_length_data else 0
+        data = environ['wsgi.input'].read(
+            content_length).decode(encoding='utf-8') if content_length > 0 else b''
+        return data
+
     def __call__(self, environ, start_response):
-        code, content = self.get_page(self.get_url(environ))
+        request = None
+        method = environ['REQUEST_METHOD']
+        url = self.get_url(environ)
+        if method == 'POST':
+            request = {'data': self.get_request_data(environ)}
+            url = f"/{url.split('/')[-1]}"
+
+        code, content = self.handle_request(url, request=request)
         start_response(code, [('Content-Type', 'text/html')])
         return [content.encode('utf-8')]
 

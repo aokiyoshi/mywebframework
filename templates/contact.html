@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Главная страница!</title>
+    <ul>
+        <li><a href="/">Главная</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/help/">Помощь</a></li>
+        <li><a href="/contact/">Контакты</a></li>
+    </ul> 
+  </head>
+  <body>
+    <p>Отправить нам сообщение: </p>
+    <p></p>
+
+    <form id="formElem">
+      <input type="text" name="message" id="msgForm">
+      <input type="submit">
+    </form>
+    
+    <script>
+      document.getElementById('formElem').addEventListener("submit", (event) => {
+        console.log('!!!!');
+        const message = document.getElementById("msgForm").value;
+        event.preventDefault();
+        const url = "27.0.0.1:8080/send";
+        fetch(url, {
+          method : "POST",
+          body: message
+        })
+      })
+    </script>
+
+  </body>
+</html>
