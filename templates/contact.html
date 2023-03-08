@@ -1,18 +1,7 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Главная страница!</title>
-    <ul>
-        <li><a href="/">Главная</a></li>
-        <li><a href="/about/">About</a></li>
-        <li><a href="/help/">Помощь</a></li>
-        <li><a href="/contact/">Контакты</a></li>
-    </ul> 
-  </head>
-  <body>
-    <p>Отправить нам сообщение: </p>
-    <p></p>
+{% extends "base.html" %}
+{% block title %}Контакты{% endblock %}
+{% block content %}
+    <p>Отправить нам сообщение:</p>
 
     <form id="formElem">
       <input type="text" name="message" id="msgForm">
@@ -31,6 +20,4 @@
         })
       })
     </script>
-
-  </body>
-</html>
+{% endblock %}

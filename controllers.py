@@ -16,7 +16,7 @@ def about(request):
 
 @router.route('/help')
 def help(request):
-    return 'help page!'
+    return render('help.html')
 
 
 @router.route('/contact')
