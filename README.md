@@ -1,7 +1,16 @@
 # mywebframework
 
-# wsgiref
-Запустить run.py
+# Запустить с wsgiref
+* Создать виртуальное окружение
+* Установить пакеты из requirements.txt
+* Запустить run.py
 
-# waitress
-Запустить run2.py
+# Запуск с помощью waitress
+* Создать виртуальное окружение
+* Установить пакеты из requirements.txt
+* Запустить run.py
+
+# Запуск с помощью gunicorn
+
+* Установить gunicorn pip install gunicorn
+* Запустить команду gunicorn run:application

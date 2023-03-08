@@ -6,4 +6,5 @@ from middlewares import middlewares
 
 application = Framework(router, middlewares)
 
-serve(application, listen='*:8080')
+if __name__ == "__main__":
+    serve(application, listen='*:8080')
