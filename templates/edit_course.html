@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Редактировавание курса "{{course_data.title}}"{% endblock %}
+{% block content %}
+
+<form id="formElem">
+  <p id="editingDone"></p>
+
+  <label for="title">Название:</label><br>
+  <input type="text" name="title" id="titleForm" value="{{course_data.title}}"><br>
+
+  <label for="date">Дата:</label><br>
+  <input type="text" name="date" id="dateForm" value="{{course_data.date}}"><br>
+
+  <label for="categories">Категория:</label><br>
+  <select name="categories" id="categories-select">
+    <option value="">--Выберите категорию--</option>
+    {% for item in categories %}
+    <option {% if item.id==course_data.id %}selected{% endif %} value="{{item.id}}">{{item.title}}</option>
+    {% endfor %}
+  </select><br>
+
+  <label for="types">Категория:</label><br>
+  <select name="types" id="types-select">
+    <option value="">--Выберите тип курса--</option>
+    {% for item in types %}
+    <option {% if item.id==course_data.id %}selected{% endif %} value="{{item.id}}">{{item.title}}</option>
+    {% endfor %}
+  </select><br>
+
+  <label for="description">Описание:</label> <br>
+  <textarea name="\" id="descForm" cols="30" rows="10">{{course_data.desc}}</textarea><br>
+  <input type="submit">
+</form>
+
+<script>
+  document.getElementById('formElem').addEventListener("submit", (event) => {
+    const title = document.getElementById("titleForm").value;
+    const desc = document.getElementById("descForm").value;
+    const category = document.getElementById("categories-select").value;
+    const type = document.getElementById("types-select").value;
+    const date = document.getElementById("dateForm").value;
+
+    event.preventDefault();
+    const url = "/courses/edit/post?id={{course_data.id}}";
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ "title": title, "desc": desc, 'category': category, 'type': type, 'date': date })
+    }).then(() => {
+      document.getElementById("editingDone").innerHTML = "Изменено!"
+    })
+  })
+</script>
+{% endblock %}

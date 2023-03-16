@@ -1,6 +1,37 @@
 <ul>
     <li><a href="/">Главная</a></li>
-    <li><a href="/about/">About</a></li>
+    <li><a href="/courses/">Все курсы</a></li>
+    {% for item in types %}
+        <li><a href="/courses/?type={{item.id}}">{{item.title}}</a></li>
+    {% endfor %}
+    <li><a href="/categories/">Категории</a></li>
     <li><a href="/help/">Помощь</a></li>
     <li><a href="/contact/">Контакты</a></li>
+    <li><a href="/login/">Войти</a></li>
 </ul> 
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+        border-radius: 5px;
+    }
+    
+    li {
+        float: left;
+    }
+    
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+    
+    li a:hover {
+        background-color: #111;
+    }
+</style>
