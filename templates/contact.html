@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% block title %}Контакты{% endblock %}
 {% block content %}
-    <p>Отправить нам сообщение:</p>
+<p>Отправить нам сообщение:</p>
 
-    <form id="formElem">
-      <input type="text" name="message" id="msgForm">
-      <input type="submit">
-    </form>
-    
-    <script>
-      document.getElementById('formElem').addEventListener("submit", (event) => {
-        console.log('!!!!');
-        const message = document.getElementById("msgForm").value;
-        event.preventDefault();
-        const url = "27.0.0.1:8080/send";
-        fetch(url, {
-          method : "POST",
-          body: message
-        })
-      })
-    </script>
+<form id="formElem">
+  <input type="text" name="message" id="msgForm">
+  <input type="submit">
+</form>
+
+<script>
+  document.getElementById('formElem').addEventListener("submit", (event) => {
+    console.log('!!!!');
+    const message = document.getElementById("msgForm").value;
+    event.preventDefault();
+    const url = "/send";
+    fetch(url, {
+      method: "POST",
+      body: message
+    })
+  })
+</script>
 {% endblock %}

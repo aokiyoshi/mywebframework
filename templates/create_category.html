@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Создать категорию курсов{% endblock %}
+{% block content %}
+<form id="formElem">
+  <label for="title">Название:</label><br>
+  <input type="text" name="title" id="titleForm"><br>
+
+  <label for="description">Описание:</label> <br>
+  <textarea name="\" id="descForm" cols="30" rows="10"></textarea><br>
+<input type="submit">
+</form>
+
+<script>
+  document.getElementById('formElem').addEventListener("submit", (event) => {
+    console.log('!!!!');
+    const title = document.getElementById("titleForm").value;
+    const desc = document.getElementById("descForm").value;
+    event.preventDefault();
+    const url = "/categories/create/post";
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ "title": title, "desc": desc })
+    })
+  })
+</script>
+{% endblock %}

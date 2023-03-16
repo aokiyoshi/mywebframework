@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Курсы{% endblock %}
+{% block content %}
+    <a href="/courses/create/">Создать</a>
+    
+    {% for item in data %}
+        <article class="forecast">
+            <article class="day-forecast">
+                <h2>{{item.title}} ({{item.type}})</h2>
+                <p>Категория: {{item.category}}</p>
+                <p>Дата проведения: {% if item.date=="None" %}
+                    Нет даты
+                {% else %}
+                    {{item.date}}
+                {% endif %}</p>
+                <p>{{item.desc}}</p>
+                <a href="/courses/edit?id={{item.id}}">Редактировать</a>
+                <a href="/courses/dublicate?id={{item.id}}">Дублировать</a>
+                <a href="/courses/delete?id={{item.id}}">Удалить</a>
+            </article>
+        </article>
+    {% endfor %}
+    {% include 'model_list_style.html' %} 
+{% endblock %}

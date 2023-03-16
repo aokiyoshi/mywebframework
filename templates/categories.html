@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Категории{% endblock %}
+{% block content %}
+<button><a href="/categories/create/">Создать</a></button>
+
+{% for item in data %}
+<article class="forecast">
+    <article class="day-forecast">
+        <h2>{{item.title}}</h2>
+        <p>{{item.desc}}</p>
+        <a href="/courses?category={{item.id}}">Онлайн курсы</a>
+        <a href="/categories/edit?id={{item.id}}">Редактировать</a>
+        <a href="/categories/dublicate?id={{item.id}}">Дублировать</a>
+        <a href="/categories/delete?id={{item.id}}">Удалить</a>
+    </article>
+</article>
+{% endfor %}
+{% include 'model_list_style.html' %}
+{% endblock %}
