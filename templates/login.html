@@ -1,13 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Контакты{% endblock %}
+{% block title %}Войти{% endblock %}
 {% block content %}
+
 <form id="formElem">
   <p id="editingDone"></p>
   <label for="username">Логин:</label><br>
   <input type="text" name="username" id="usernameForm"><br>
   <label for="password">Пароль:</label> <br>
   <input type="text" name="password" id="passwordForm"><br>
-  <input type="submit">
+  <input type="submit" value="Войти">
 </form>
 
 <script>
@@ -23,7 +24,11 @@
       body: JSON.stringify({ "username": username, "password": password})
     }).then((response) => response.text())
     .then((data) => {
-      window.localStorage.setItem('token', data);
+      const token = data;
+      document.cookie = `username=${username}access_token=${token}`
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', username);
+      console.log(data);
     })
   });
 </script>

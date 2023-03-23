@@ -1,5 +1,6 @@
 from io import BytesIO
-
+from pprint import pprint
+from wsgiref.handlers import read_environ
 
 class Framework:
     def __init__(self, routes, middlewares=None):
@@ -52,7 +53,9 @@ class Framework:
 
         data = environ['wsgi.input'].read(
             content_length).decode(encoding='utf-8') if content_length > 0 else b''
-
+        
+        print(f'{data=}')
+        
         return data
 
     def __call__(self, environ, start_response):
@@ -60,6 +63,7 @@ class Framework:
         is_post = False
         request = {}
         method = environ['REQUEST_METHOD']
+
         url = self.get_url(environ)
         query_str = environ['QUERY_STRING']
 
@@ -75,3 +79,21 @@ class Framework:
 
         start_response(code, [('Content-Type', 'text/html')])
         return [content.encode('utf-8')]
+
+
+class FakeApp:
+    def __call__(self, environ, start_response):
+        start_response('200 : OK', [('Content-Type', 'text/html')])
+        return ['Hello from Fake'.encode('utf-8')] 
+
+
+class DebugApplication(Framework):
+    
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        print('DEBUG MODE')
+        print(env)
+        return self.application(env, start_response)

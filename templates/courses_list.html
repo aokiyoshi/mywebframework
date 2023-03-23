@@ -13,12 +13,27 @@
                 {% else %}
                     {{item.date}}
                 {% endif %}</p>
-                <p>{{item.desc}}</p>
+                <div>
+                    {% for tag in item.tags %}
+                        <small id="rcorners4">
+                            <a href="/courses?tag={{tag.tag}}">{{tag.tag}}</a>
+                            <!-- <a href="#">⌫</a> -->
+                        </small>
+                    {% endfor %}
+                    <!-- <small id="rcorners4">
+                        <a href="#">Добавить</a>
+                    </small> -->
+                </div>
+                
                 <a href="/courses/edit?id={{item.id}}">Редактировать</a>
                 <a href="/courses/dublicate?id={{item.id}}">Дублировать</a>
                 <a href="/courses/delete?id={{item.id}}">Удалить</a>
             </article>
         </article>
     {% endfor %}
-    {% include 'model_list_style.html' %} 
+    
+    {% include 'model_list_style.html' %}
+
 {% endblock %}
+
+

@@ -1,13 +1,9 @@
 from wsgiref.simple_server import make_server
 
-from mywebframework.main import Framework, FakeApp, DebugApplication
-
-from controllers import router
-from middlewares import middlewares
+from fakeapp.fakeapp import FakeApp
 
 
-
-application = Framework(router, middlewares)
+application = FakeApp()
 
 
 if __name__ == "__main__":
