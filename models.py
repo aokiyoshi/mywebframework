@@ -2,6 +2,8 @@ import hashlib
 import uuid
 from mywebframework.db import TableManager
 from settings import DB_NAME
+import secrets
+
 
 class User(TableManager):
     table_name = 'users'
@@ -18,18 +20,28 @@ class User(TableManager):
         )
 
     def create_user(self, username, first_name, last_name, password):
-        _salt = uuid.uuid4().hex
         hashed_password = hashlib.sha512(
-            (password + _salt).encode()).hexdigest()
+            (password).encode()).hexdigest()
         User(DB_NAME).insert(
             username=username, first_name=first_name, last_name=last_name, password=hashed_password)
 
-    def check_password(self, user_id, password):
-        user = User.filter(id=user_id).first()
-        _salt = user.salt
+    def check_password(self, username, password):
+        user = User(DB_NAME).select(username=username)
+        if user is None:
+            return False
         hashed_password = hashlib.sha512(
-            (password + _salt).encode()).hexdigest()
-        return user.password == hashed_password
+            (password).encode()).hexdigest()
+        return user.get('password') == hashed_password
+    
+    def create_token(self, username):
+        user_id = User(DB_NAME).select(username=username).get('id')
+        token = Token(DB_NAME).select(user=user_id)
+        if not token:
+            token = secrets.token_urlsafe(32)
+            Token(DB_NAME).insert(user=user_id, token=token)
+        else:
+            token = token.get('token')
+        return token
 
 
 class Token(TableManager):
@@ -116,3 +128,7 @@ class Tag(TableManager):
             course=Course,
             tag='TEXT',
         )
+
+    def select_by_course_id(self, course_id):
+        course = Course(DB_NAME).select(id=course_id)
+        return Tag(DB_NAME).select_many(course=course)

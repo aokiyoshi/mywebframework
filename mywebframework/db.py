@@ -24,6 +24,7 @@ class TableManager:
         self.types = kwargs
         self.foreign_keys = []
         self.column_names = []
+        
         for key, val in self.types.items():
             if isinstance(val, str):
                 self.types[key] = val.upper()

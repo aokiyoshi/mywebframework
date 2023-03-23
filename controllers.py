@@ -1,6 +1,7 @@
 from mywebframework.router import Router
+from mywebframework.logger import Logger, debug
 from mywebframework.template_engine import render
-from models import Course, Category, CourseType
+from models import Course, Category, CourseType, User, Tag
 from settings import DB_NAME
 import json
 
@@ -16,6 +17,7 @@ def get_default_context(request):
 
 # Статичные страницы
 @router.route('')
+@debug(logger=Logger)
 def main(request):
     return render('index.html', **get_default_context(request))
 
@@ -38,6 +40,11 @@ def courses(request):
     else:
         data = Course(DB_NAME).select_all()
 
+    if tag_name := request.get('tag'):
+        tags = Tag(DB_NAME).select_many(tag=tag_name)
+        tagged_courses_ids = [tag['course'] for tag in tags]
+        data = [item for item in data if item.get('id') in tagged_courses_ids]
+
     for item in data:
         category_id = item['category']
         type_id = item['type']
@@ -52,6 +59,7 @@ def courses(request):
 
         category = Category(DB_NAME).select(id=category_id)
         course_type = CourseType(DB_NAME).select(id=category_id)
+        tags = Tag(DB_NAME).select_many(course=item.get('id'))
 
         if not category:
             item['category'] = 'Без категории'
@@ -63,6 +71,7 @@ def courses(request):
 
         item['category'] = category['title']
         item['type'] = course_type['title']
+        item['tags'] = tags
 
     return render('courses_list.html', **get_default_context(request), data=data)
 
@@ -163,6 +172,16 @@ def dublicate_online(request):
     return render('redirect.html', **get_default_context(request), url='/categories')
 
 
+# Тэги
+@router.route('/addtag')
+def add_tag(request):
+    pass
+
+@router.route('/addtag')
+def delete_tag(request):
+    pass
+
+
 # 404
 @router.route('/notfound')
 def not_found(request):
@@ -194,4 +213,9 @@ def contact(request):
 
 @router.route('/auth')
 def contact(request):
-    return 'ok'
+    print(f"{request=}")
+    data = json.loads(request.get('data'))
+    username = data.get('username')
+    password = data.get('password')
+    res = User(DB_NAME).check_password(username, password)
+    return User(DB_NAME).create_token(username=username) if res else 'Acsess denied'
